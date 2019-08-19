@@ -140,17 +140,17 @@ public class ArrayAccessReplacer extends JavaParserBaseListener {
         if (ctx.getChildCount() == 4
                 && ctx.getChild(1).getText().equals("[")
                 && ctx.getChild(3).getText().equals("]")) {
-            currentArray.ifPresent(context -> {
-                final List<String> variablesUsed = accesses.get(context);
+            currentArray.ifPresent(currentArray -> {
+                final List<String> variablesUsed = accesses.get(currentArray);
                 variablesUsed.add(ctx.getChild(2).getText());
-                accesses.put(context, variablesUsed);
+                accesses.put(currentArray, variablesUsed);
                 dimensions.entrySet().stream()
-                        .filter(e -> e.getKey().getText().equals(context.getText()))
+                        .filter(e -> e.getKey().getText().equals(currentArray.getText()))
                         .mapToInt(e -> e.getValue().size())
                         .findAny()
                         .ifPresent(i -> {
                             if (i == variablesUsed.size()) {
-                                currentArray = Optional.empty();
+                                this.currentArray = Optional.empty();
                             }
                         });
             });
